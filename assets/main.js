@@ -2,27 +2,29 @@
 
 $(document).ready(function () {
     // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyBRz_C7pIldj2ZAb6479BpsX8ee9c33mj8",
-        authDomain: "sample-db-a0396.firebaseapp.com",
-        databaseURL: "https://sample-db-a0396.firebaseio.com",
-        projectId: "sample-db-a0396",
-        storageBucket: "sample-db-a0396.appspot.com",
-        messagingSenderId: "960877017269"
-      };
-      firebase.initializeApp(config);
+
+   // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBFrK8o_sY_ms8QqXt-dPhMVXDI2QNF1TU",
+    authDomain: "train-scheduler-stoyan.firebaseapp.com",
+    databaseURL: "https://train-scheduler-stoyan.firebaseio.com",
+    projectId: "train-scheduler-stoyan",
+    storageBucket: "train-scheduler-stoyan.appspot.com",
+    messagingSenderId: "200682727357"
+  };
+  firebase.initializeApp(config);
     
     // Create a variable to reference the database
     var database = firebase.database();
     
-    $("#add-employee-btn").on("click", function(event) {
+    $("#Submit-btn").on("click", function(event) {
       event.preventDefault();
      
       // Grabs user input
-      var empName = $("#employee-name-input").val().trim();
-      var empRole = $("#role-input").val().trim();
-      var empStart = $("#start-input").val().trim();
-      var empRate = $("#rate-input").val().trim();
+      var empName = $("#train-name-input").val().trim();
+      var empRole = $("#destination-input").val().trim();
+      var empStart = $("#Time-input").val().trim();
+      var empRate = $("#Friquency-input").val().trim();
      
       // Creates local "temporary" object for holding employee data
       var newEmp = {
@@ -46,10 +48,10 @@ $(document).ready(function () {
       alert("Employee successfully added");
      
       // Clears all of the text-boxes
-      $("#employee-name-input").val("");
-      $("#role-input").val("");
-      $("#start-input").val("");
-      $("#rate-input").val("");
+      $("#train-name-input").val("");
+      $("#destination-input").val("");
+      $("#Time-input").val("");
+      $("#Friquency-input").val("");
      });
      
      // 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
