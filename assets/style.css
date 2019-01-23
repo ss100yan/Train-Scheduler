@@ -1,4 +1,7 @@
 .jumbotron {
     background-image: url("pipes.png");
-    background-size: cover;
+    /* background-size: cover; */
   }
+body{
+    background-image: url("crossline-dots.png");
+}
