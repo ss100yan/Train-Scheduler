@@ -1,9 +1,8 @@
 /* global moment firebase */
 
 $(document).ready(function () {
-    // Initialize Firebase
-
-   // Initialize Firebase
+  
+     // Initialize Firebase
   var config = {
     apiKey: "AIzaSyBFrK8o_sY_ms8QqXt-dPhMVXDI2QNF1TU",
     authDomain: "train-scheduler-stoyan.firebaseapp.com",
@@ -14,98 +13,76 @@ $(document).ready(function () {
   };
   firebase.initializeApp(config);
     
-    // Create a variable to reference the database
+   // Create a variable to reference the database
     var database = firebase.database();
+       $("#Submit-btn").on("click", function(event) {
+         event.preventDefault();
+           // Grabs user input
+            var trainName = $("#train-name-input").val().trim();
+              var destination = $("#destination-input").val().trim();
+               var firstTrainTime = $("#Time-input").val().trim();
+                 var friquency = $("#Friquency-input").val().trim();
+                   // Creates local "temporary" object for holding the train data
+                     var newTrain = {
+                       trainName: trainName,
+                         destination: destination,
+                           firstTrainTime: firstTrainTime,
+                            friquency: friquency,
+                              dateAdded: firebase.database.ServerValue.TIMESTAMP
+                                };
+                                 // Uploads Train data to the database
+                                    console.log(newTrain);
+                                       database.ref().push(newTrain);
+                                   // Clears all of the text-boxes
+                                  $("#train-name-input").val("");
+                                $("#destination-input").val("");
+                             $("#Time-input").val("");
+                           $("#Friquency-input").val("");
+                         });
+                       // 3. Create Firebase event for adding train to the database and a row in the html when a user adds an entry
+                    database.ref().on("child_added", function(childSnapshot) {
+                console.log(childSnapshot.val());
+            // Store everything into a variable.
+          var htmlTrainName =childSnapshot.val().trainName;
+        var htmldestination = childSnapshot.val().destination;
+      var htmlfirstTrainTime = childSnapshot.val().firstTrainTime;
+   var htmlfriquency = childSnapshot.val().friquency;
+ // Train Info
+  console.log(htmlTrainName);
+    console.log(htmldestination);
+      console.log(htmlfirstTrainTime);
+        console.log(htmlfriquency);
     
-    $("#Submit-btn").on("click", function(event) {
-      event.preventDefault();
+            var minAway;
+              // Chang year so first train comes before now
+                  var firstTrainNew = moment(childSnapshot.val().firstTrainTime, "hh:mm").subtract(1, "years");
+                       // Difference between the current and firstTrain
+                          var diffTime = moment().diff(moment(firstTrainNew), "minutes");
+                              var remainder = diffTime % childSnapshot.val().frequency;
+                                  // Minutes until next train
+                                      var minAway = childSnapshot.val().frequency - remainder;
+                                             // Next train time
+                                                var nextTrain = moment().add(minAway, "minutes");
+                                                      nextTrain = moment(nextTrain).format("hh:mm");
      
-      // Grabs user input
-      var empName = $("#train-name-input").val().trim();
-      var empRole = $("#destination-input").val().trim();
-      var empStart = $("#Time-input").val().trim();
-      var empRate = $("#Friquency-input").val().trim();
-     
-      // Creates local "temporary" object for holding employee data
-      var newEmp = {
-        name: empName,
-        role: empRole,
-        start: empStart,
-        rate: empRate
-      };
-     
-      // Uploads employee data to the database
-      console.log(newEmp);
-      database.ref().push(newEmp);
-     
-      // Logs everything to console
-      console.log(newEmp.name);
-      console.log(newEmp.role);
-      console.log(newEmp.start);
-      console.log(newEmp.rate);
-     
-      // Alert
-      alert("Employee successfully added");
-     
-      // Clears all of the text-boxes
-      $("#train-name-input").val("");
-      $("#destination-input").val("");
-      $("#Time-input").val("");
-      $("#Friquency-input").val("");
-     });
-     
-     // 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
-     database.ref().on("child_added", function(employeeSnapshot) {
-     
-      console.log(employeeSnapshot.val());
-     
-      // Store everything into a variable.
-      var empName = employeeSnapshot.val().name;
-      var empRole = employeeSnapshot.val().role;
-      var empStart = employeeSnapshot.val().start;
-      var empRate = employeeSnapshot.val().rate;
-     
-      // Employee Info
-      console.log(empName);
-      console.log(empRole);
-      console.log(empStart);
-      console.log(empRate);
-     
-      // Prettify the employee start
-      var empStartPretty = moment(empStart).format("MM/DD/YY");
-      var empStartMoment = moment(empStart, "YYYY-MM-DD");
-     
-      // Calculate the months worked using hardcore math
-      // To calculate the months worked
-      var empMonths = Math.abs(empStartMoment.diff(moment(), "months"));
-      console.log(empMonths);
-     
-      // Calculate the total billed rate
-      var empBilled = empMonths * empRate;
-      console.log(empBilled);
-    
-      var createRow = function(data) {
-        // Create a new table row element
-        var tRow = $("<tr>");
-    
-        // Methods run on jQuery selectors return the selector they we run on
-        // This is why we can create and save a reference to a td in the same statement we update its text
-        var emName = $("<td>").text(empName);
-        var emRole = $("<td>").text(empRole);
-        var emStartDate = $("<td>").text(empStartPretty);
-        var emMonths = $("<td>").text(empMonths);
-        var emMonthly = $("<td>").text(empRate);
-        var totalBilled = $("<td>").text(empBilled);
-    
-        // Append the newly created table data to the table row
-        tRow.append(emName, emRole, emStartDate, emMonths, emMonthly, totalBilled);
-        // Append the table row to the table body
-        $("#currentEmployees").append(tRow);
-        
-      };
-    
-      createRow();
-      
-     });
-    });
+
+
+                                                          var createRow = function(data) {
+                                                       // Create a new table row element
+                                                     var tRow = $("<tr>");
+                                                // Methods run on jQuery selectors return the selector they we run on
+                                             // This is why we can create and save a reference to a td in the same statement we update its text
+                                            var TTName = $("<td>").text(htmlTrainName);
+                                          var TTD = $("<td>").text(htmldestination);
+                                       var TTnext = $("<td>").text(nextTrain);
+                                     var TTaway = $("<td>").text(minAway);
+                                    var TTF = $("<td>").text(htmlfriquency);
+                                   // Append the newly created table data to the table row
+                                 tRow.append(TTName, TTD, TTF, TTaway, TTnext);
+                               // Append the table row to the table body
+                            $("#currentEmployees").append(tRow);
+                          };
+                        createRow();
+                      });
+                   });
     
