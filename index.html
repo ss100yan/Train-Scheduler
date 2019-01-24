@@ -14,14 +14,15 @@
 </head>
 
 
-<body>
+<body onload=display_ct();>
     <div class="row">
         <div class="col-lg-12">
             <header>
                 <div class="jumbotron">
                    
                     <h1 class="text-center" style="font-family: 'Anton', sans-serif;">Train Scheduler</h1>
-                    <h3 class="text-center"></h3>
+                    
+                                           
                 </div>
             </header>
         </div>
@@ -33,6 +34,7 @@
             <div  class="card " >
                 <div class="card-header text-white bg-warning mb-3">
                     Current Train Schedule
+                    <p class="text-center"><span id='ct' ></span></p>
                 </div>
                 <div class="card-body">
                     <table class="table" id="currentEmployees">
