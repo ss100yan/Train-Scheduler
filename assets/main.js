@@ -21,13 +21,13 @@ $(document).ready(function () {
             var trainName = $("#train-name-input").val().trim();
               var destination = $("#destination-input").val().trim();
                var firstTrainTime = $("#Time-input").val().trim();
-                 var friquency = $("#Friquency-input").val().trim();
+                 var frequency = $("#Frequency-input").val().trim();
                    // Creates local "temporary" object for holding the train data
                      var newTrain = {
                        trainName: trainName,
                          destination: destination,
                            firstTrainTime: firstTrainTime,
-                            friquency: friquency,
+                           frequency: frequency,
                               dateAdded: firebase.database.ServerValue.TIMESTAMP
                                 };
                                  // Uploads Train data to the database
@@ -37,7 +37,7 @@ $(document).ready(function () {
                                   $("#train-name-input").val("");
                                 $("#destination-input").val("");
                              $("#Time-input").val("");
-                           $("#Friquency-input").val("");
+                           $("#Frequency-input").val("");
                          });
                        // 3. Create Firebase event for adding train to the database and a row in the html when a user adds an entry
                     database.ref().on("child_added", function(childSnapshot) {
@@ -46,13 +46,14 @@ $(document).ready(function () {
           var htmlTrainName =childSnapshot.val().trainName;
         var htmldestination = childSnapshot.val().destination;
       var htmlfirstTrainTime = childSnapshot.val().firstTrainTime;
-   var htmlfriquency = childSnapshot.val().friquency;
+   var htmlfrequency = childSnapshot.val().frequency;
  // Train Info
   console.log(htmlTrainName);
     console.log(htmldestination);
       console.log(htmlfirstTrainTime);
-        console.log(htmlfriquency);
-    
+        console.log(htmlfrequency);
+
+          //conversion to minutes away = minutes(start) -minutes(now)/friequency ++ remainder
             var minAway;
               // Chang year so first train comes before now
                   var firstTrainNew = moment(childSnapshot.val().firstTrainTime, "hh:mm").subtract(1, "years");
@@ -64,9 +65,11 @@ $(document).ready(function () {
                                              // Next train time
                                                 var nextTrain = moment().add(minAway, "minutes");
                                                       nextTrain = moment(nextTrain).format("hh:mm");
-     
-
-
+                                                        console.log(minAway);
+                                                            console.log(firstTrainNew);
+                                                                console.log(diffTime);
+                                                              console.log(remainder);
+                                                            console.log(nextTrain);
                                                           var createRow = function(data) {
                                                        // Create a new table row element
                                                      var tRow = $("<tr>");
@@ -76,9 +79,9 @@ $(document).ready(function () {
                                           var TTD = $("<td>").text(htmldestination);
                                        var TTnext = $("<td>").text(nextTrain);
                                      var TTaway = $("<td>").text(minAway);
-                                    var TTF = $("<td>").text(htmlfriquency);
+                                    var TTF = $("<td>").text(htmlfrequency);
                                    // Append the newly created table data to the table row
-                                 tRow.append(TTName, TTD, TTF, TTaway, TTnext);
+                                 tRow.append(TTName, TTD, TTF, TTnext, TTaway);
                                // Append the table row to the table body
                             $("#currentEmployees").append(tRow);
                           };
