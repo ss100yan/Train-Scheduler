@@ -1,8 +1,8 @@
-/* global moment firebase */
+
 
 $(document).ready(function () {
   
-     // Initialize Firebase
+     // ..................Initialize Firebase
   var config = {
     apiKey: "AIzaSyBFrK8o_sY_ms8QqXt-dPhMVXDI2QNF1TU",
     authDomain: "train-scheduler-stoyan.firebaseapp.com",
@@ -13,11 +13,11 @@ $(document).ready(function () {
   };
   firebase.initializeApp(config);
     
-   // Create a variable to reference the database
+   // .........Create a database variable
     var database = firebase.database();
        $("#Submit-btn").on("click", function(event) {
          event.preventDefault();
-           // Grabs user input
+           // User input
             var trainName = $("#train-name-input").val().trim();
               var destination = $("#destination-input").val().trim();
                var firstTrainTime = $("#Time-input").val().trim();
@@ -30,19 +30,19 @@ $(document).ready(function () {
                            frequency: frequency,
                               dateAdded: firebase.database.ServerValue.TIMESTAMP
                                 };
-                                 // Uploads Train data to the database
+                                 // Uploads data to firebase
                                     console.log(newTrain);
                                        database.ref().push(newTrain);
-                                   // Clears all of the text-boxes
+                                   
                                   $("#train-name-input").val("");
                                 $("#destination-input").val("");
                              $("#Time-input").val("");
                            $("#Frequency-input").val("");
                          });
-                       // 3. Create Firebase event for adding train to the database and a row in the html when a user adds an entry
+                      
                     database.ref().on("child_added", function(childSnapshot) {
                 console.log(childSnapshot.val());
-            // Store everything into a variable.
+                    
           var htmlTrainName =childSnapshot.val().trainName;
         var htmldestination = childSnapshot.val().destination;
       var htmlfirstTrainTime = childSnapshot.val().firstTrainTime;
@@ -53,9 +53,9 @@ $(document).ready(function () {
       console.log(htmlfirstTrainTime);
         console.log(htmlfrequency);
 
-          //conversion to minutes away = minutes(start) -minutes(now)/friequency ++ remainder
+         
             var minAway;
-              // Chang year so first train comes before now
+             
                   var firstTrainNew = moment(childSnapshot.val().firstTrainTime, "hh:mm").subtract(1, "years");
                        // Difference between the current and firstTrain
                           var diffTime = moment().diff(moment(firstTrainNew), "minutes");
@@ -73,8 +73,7 @@ $(document).ready(function () {
                                                           var createRow = function(data) {
                                                        // Create a new table row element
                                                      var tRow = $("<tr>");
-                                                // Methods run on jQuery selectors return the selector they we run on
-                                             // This is why we can create and save a reference to a td in the same statement we update its text
+
                                             var TTName = $("<td>").text(htmlTrainName);
                                           var TTD = $("<td>").text(htmldestination);
                                        var TTnext = $("<td>").text(nextTrain);
