@@ -1,8 +1,6 @@
-
-
 $(document).ready(function () {
   
-     // ..................Initialize Firebase
+     // ..................Initialize Firebase................
   var config = {
     apiKey: "AIzaSyBFrK8o_sY_ms8QqXt-dPhMVXDI2QNF1TU",
     authDomain: "train-scheduler-stoyan.firebaseapp.com",
@@ -13,11 +11,11 @@ $(document).ready(function () {
   };
   firebase.initializeApp(config);
     
-   // .........Create a database variable
+   // .........Create a database variable....................
     var database = firebase.database();
        $("#Submit-btn").on("click", function(event) {
          event.preventDefault();
-           // User input
+           // .............User input......................
             var trainName = $("#train-name-input").val().trim();
               var destination = $("#destination-input").val().trim();
                var firstTrainTime = $("#Time-input").val().trim();
@@ -28,37 +26,34 @@ $(document).ready(function () {
                            firstTrainTime: firstTrainTime,
                            frequency: frequency,
                                };
-                                 // Uploads data to firebase
+                                 // ......Uploads to firebase............
                                     console.log(newTrain);
                                        database.ref().push(newTrain);
-                                   
                                   $("#train-name-input").val("");
                                 $("#destination-input").val("");
                              $("#Time-input").val("");
                            $("#Frequency-input").val("");
                          });
-                      
                     database.ref().on("child_added", function(childSnapshot) {
-                console.log(childSnapshot.val());
-                    
+              console.log(childSnapshot.val());    
           var htmlTrainName =childSnapshot.val().trainName;
         var htmldestination = childSnapshot.val().destination;
       var htmlfirstTrainTime = childSnapshot.val().firstTrainTime;
    var htmlfrequency = childSnapshot.val().frequency;
- // Train Info
+ // ..........Train Info..........................
   console.log(htmlTrainName);
     console.log(htmldestination);
       console.log(htmlfirstTrainTime);
         console.log(htmlfrequency);
-          //................Moment.js.........................
+          //...............Using Moment.js for minutes away and next arrival time convertions .........................
             var minAway;
                   var firstTrainNew = moment(childSnapshot.val().firstTrainTime, "hh:mm").subtract(1, "years");
-                       // Difference between the current and firstTrain
+                       //............. Difference between the current and firstTrain.................
                           var diffTime = moment().diff(moment(firstTrainNew), "minutes");
                               var remainder = diffTime % childSnapshot.val().frequency;
-                                  // Minutes until next train
+                                  // ..............Minutes until next train......................
                                       var minAway = childSnapshot.val().frequency - remainder;
-                                             // Next train time
+                                             // .............Next train time....................
                                                 var nextTrain = moment().add(minAway, "minutes");
                                                       nextTrain = moment(nextTrain).format("hh:mm");
                                                         console.log(minAway);
