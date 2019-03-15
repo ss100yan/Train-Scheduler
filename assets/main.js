@@ -22,14 +22,12 @@ $(document).ready(function () {
               var destination = $("#destination-input").val().trim();
                var firstTrainTime = $("#Time-input").val().trim();
                  var frequency = $("#Frequency-input").val().trim();
-                   // Creates local "temporary" object for holding the train data
-                     var newTrain = {
+                    var newTrain = {
                        trainName: trainName,
                          destination: destination,
                            firstTrainTime: firstTrainTime,
                            frequency: frequency,
-                              dateAdded: firebase.database.ServerValue.TIMESTAMP
-                                };
+                               };
                                  // Uploads data to firebase
                                     console.log(newTrain);
                                        database.ref().push(newTrain);
@@ -52,10 +50,8 @@ $(document).ready(function () {
     console.log(htmldestination);
       console.log(htmlfirstTrainTime);
         console.log(htmlfrequency);
-
-         
+          //................Moment.js.........................
             var minAway;
-             
                   var firstTrainNew = moment(childSnapshot.val().firstTrainTime, "hh:mm").subtract(1, "years");
                        // Difference between the current and firstTrain
                           var diffTime = moment().diff(moment(firstTrainNew), "minutes");
@@ -72,24 +68,23 @@ $(document).ready(function () {
                                                             console.log(nextTrain);
                                                           var createRow = function(data) {
                                                        // Create a new table row element
-                                                     var tRow = $("<tr>");
-
-                                            var TTName = $("<td>").text(htmlTrainName);
+                                                 var tRow = $("<tr>");
+                                             var TTName = $("<td>").text(htmlTrainName);
                                           var TTD = $("<td>").text(htmldestination);
                                        var TTnext = $("<td>").text(nextTrain);
                                      var TTaway = $("<td>").text(minAway);
                                     var TTF = $("<td>").text(htmlfrequency);
-                                   // Append the newly created table data to the table row
+                                   // .......Append the newly created table data to the table row
                                  tRow.append(TTName, TTD, TTF, TTnext, TTaway);
-                               // Append the table row to the table body
+                               // .....Append the table row to the table body
                             $("#currentEmployees").append(tRow);
                           };
                         createRow();
                       });
                    });
-
+                  // .................Current time display widget...........
                 function display_c(){
-              var refresh=1000; // Refresh rate in milli seconds
+              var refresh=1000; 
             mytime=setTimeout('display_ct()',refresh)
           }
        function display_ct() {
